@@ -40,7 +40,7 @@ return (
                   <span className="glyphicon glyphicon-user"></span>
                 </button>
                 <button type="button" className="btn btn-default">
-
+                  ☺
                 </button>
                 <button type="button" className="btn btn-default">
                   <span className="glyphicon glyphicon-pushpin"></span>
