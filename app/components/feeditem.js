@@ -5,6 +5,8 @@ import Comment from './comment';
 import {postComment} from '../server';
 import {unlikeFeedItem} from '../server';
 import {likeFeedItem} from '../server';
+import {likeComment} from '../server';
+import {unlikeComment} from '../server';
 
 export default class FeedItem extends React.Component {
   constructor(props) {
@@ -44,6 +46,42 @@ didUserLike() {
   for (var i = 0; i < likeCounter.length; i++) {
     if (likeCounter[i]._id === 4) {
       liked = true;
+      break;
+    }
+  }
+  return liked;
+}
+handleCommentLike(e, i) {
+  e.preventDefault();
+  if(e.button == 0) {
+    var callBackFunction = (commentLikes) => {
+      this.setState(commentLikes);
+    };
+    if(this.didLikeComment(i)) {
+      unlikeComment(this.state._id, 4, i, callBackFunction);
+    }
+    else {
+      likeComment(this.state._id, 4, i, callBackFunction);
+    }
+  }
+}
+didLikeComment(i) {
+  var likeCounter = this.state.comments[i].likeCounter;
+  var liked = false;
+  for(var x = 0; x < likeCounter.length; x++) {
+    if(likeCounter[x] === 4) {
+      liked = true;
+      break;
+    }
+  }
+  return liked;
+}
+commentLikeText(i) {
+  var likeCounter = this.state.comments[i].likeCounter;
+  var liked = "Like";
+  for(var x = 0; x < likeCounter.length; x++) {
+    if(likeCounter[x] === 4) {
+      liked = "Unlike";
       break;
     }
   }
@@ -114,8 +152,11 @@ didUserLike() {
                 // i is comment's index in comments array
                 return (
                   <Comment key={i}
+                    onClick={(e) => this.handleCommentLike(e, i)}
                     author={comment.author}
-                    postDate={comment.postDate}>
+                    postDate={comment.postDate}
+                    likeCounter={comment.likeCounter}
+                    commentLikeText={this.commentLikeText(i)}>
                     {comment.contents}
                   </Comment>
                 );
